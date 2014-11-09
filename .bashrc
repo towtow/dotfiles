@@ -273,4 +273,5 @@ color_maven() {
 }
 alias mvn=color_maven
 alias maven=$M2_HOME/bin/mvn
+export EDITOR=/usr/bin/emacs
 
