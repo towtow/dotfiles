@@ -118,8 +118,9 @@ function settitle() {
 }
  
 export EDITOR=emacsclient
-PROMPT_COMMAND='settitle; git_branch; svn_branch; history -a;'
-export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]${gitbranch}\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
+export PROMPT_COMMAND='settitle; git_branch; svn_branch; history -a;'
+# git+svn - export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]${gitbranch}\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
+export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
 export PS2=' | '
 
 eval `dircolors ~/.dir_colors`
