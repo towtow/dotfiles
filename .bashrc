@@ -30,6 +30,8 @@ function color_maven {
 }
 
 alias ls="ls --color"
+alias grep="grep --color=always"
+alias less="less -R"
 alias vi="vim"
 alias sqlplus="rlwrap $ORACLE_HOME/bin/sqlplus"
 alias idea="/opt/idea/bin/idea.sh >/dev/null 2>&1 &"
@@ -129,3 +131,5 @@ eval `dircolors ~/.dir_colors`
 
 export NVM_DIR="/home/tow/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+export TERM=screen-256color-bce
