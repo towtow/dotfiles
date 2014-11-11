@@ -1,4 +1,3 @@
-export LANG=$(locale)
 # todo: cygwin    export LANG=$(locale -uU)
 
 if [ -n "${BASH_VERSION}" ]; then
