@@ -9,24 +9,32 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 function cleansandbox {
-	svn revert -R .
-	svn st | grep ^\? | cut -c3- | xargs rm -r 2>/dev/null
-	svn st
-	echo Cleaned.
+    svn revert -R .
+    svn st | grep ^\? | cut -c3- | xargs rm -r 2>/dev/null
+    svn st
+    echo Cleaned.
 }
 function fixsandbox {
-	local SVNURL
-	SVNURL=`svn info | grep ^URL | cut -d' ' -f2`
-	find . -name .svn -type d -print0 2>/dev/null | xargs -0 rm -rf
-	svn co --force $SVNURL . >/dev/null
-	svn st
-	echo Fixed.
+    local SVNURL
+    SVNURL=`svn info | grep ^URL | cut -d' ' -f2`
+    find . -name .svn -type d -print0 2>/dev/null | xargs -0 rm -rf
+    svn co --force $SVNURL . >/dev/null
+    svn st
+    echo Fixed.
 }
 function color_maven {
-  $M2_HOME/bin/mvn $* | sed -e 's/Tests run: \([^,]*\), Failures: \([^,]*\), Errors: \([^,]*\), Skipped: \([^,]*\)/[1;32mTests run: \1[0m, Failures: [1;31m\2[0m, Errors: [1;33m\3[0m, Skipped: [1;34m\4[0m/g' \
-    -e 's/\(\[WARN\].*\)/[1;33m\1[0m/g' \
-    -e 's/\(\[INFO\].*\)/[1;34m\1[0m/g' \
-    -e 's/\(\[ERROR\].*\)/[1;31m\1[0m/g'
+    $M2_HOME/bin/mvn $* | sed \
+	-e 's/\(\[WARN\].*\)/[1;33m\1[0m/g' \
+	-e 's/\(\[INFO\].*\)/[1;34m\1[0m/g' \
+	-e 's/\(\[ERROR\].*\)/[1;31m\1[0m/g' \
+	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: 0/s/\(.*\)/[0;32m\1[0m/g' \
+	-e '/Tests run.*Failures: [^0].*, Errors: 0, Skipped: 0/s/\(.*\)/[0;31m\1[0m/g' \
+	-e '/Tests run.*Failures: 0, Errors: [^0], Skipped: 0/s/\(.*\)/[0;31m\1[0m/g' \
+	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: [^0]/s/\(.*\)/[0;33m\1[0m/g'
+    # [0;31m red[0m
+    # [0;32m green[0m
+    # [0;33m yellow[0m
+    # [0;37m white[0m
 }
 
 alias ls="ls --color"
