@@ -49,6 +49,10 @@ alias trunkdb="sqlplus tow_trunk/tow_trunk@//localhost:1521/XE"
 alias branch1db="sqlplus tow_branch1/tow_branch1@//localhost:1521/XE"
 alias branch2db="sqlplus tow_branch2/tow_branch2@//localhost:1521/XE"
 alias releasedb="sqlplus tow_release/tow_release@//localhost:1521/XE"
+alias t="cd ~/ng/trunk"
+alias b1="cd ~/ng/branch1"
+alias b2="cd ~/ng/branch2"
+alias r="cd ~/ng/release"
 alias tjb="cd ~/ng/trunk/local/jboss/bin ; ./run.sh"
 alias b1jb="cd ~/ng/branch1/local/jboss/bin ; ./run.sh"
 alias b2jb="cd ~/ng/branch2/local/jboss/bin ; ./run.sh"
@@ -140,7 +144,7 @@ eval `dircolors ~/.dir_colors`
 export NVM_DIR="/home/tow/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
-export TERM=screen-256color-bce
+export TERM=xterm
 
 preexec () {
     echo -n "[1;34m[0m" && :;
