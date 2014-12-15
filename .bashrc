@@ -61,9 +61,10 @@ alias forge=~/dev/TriggerToolkit/forge
 alias nocaps="setxkbmap -option caps:none"
 alias f="find . -name"
 alias l="ls -l"
-alias m="ant -Dskip.tests=true makeAll"
-alias cuma="ant -Dskip.tests=true clean undeploy makeAll"
-alias fresh="ant -Dskip.tests=true clean undeploy makeAll freshEnv"
+alias a="ant -Dskip.tests=true"
+alias m="a makeAll"
+alias cm="a clean undeploy makeAll"
+alias fresh="a clean undeploy makeAll freshEnv"
 alias mkknownhosts="scp root@monitoring.prod.dc.local:/etc/ssh/ssh_known_hosts /home/tow/.ssh/known_hosts && cat /home/tow/.ssh/additional_known_hosts >>/home/tow/.ssh/known_hosts"
 alias v="evince >/dev/null 2>&1"
 alias mvn=color_maven
