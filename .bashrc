@@ -12,6 +12,7 @@ function cleansandbox {
     svn revert -R .
     svn st | grep ^\? | cut -c3- | xargs rm -r 2>/dev/null
     svn st
+    svn up
     echo Cleaned.
 }
 function fixsandbox {
