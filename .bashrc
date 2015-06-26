@@ -25,7 +25,8 @@ function fixsandbox {
 }
 function color_maven {
     $M2_HOME/bin/mvn $* | sed \
-	-e 's/\(\[WARN\].*\)/[1;33m\1[0m/g' \
+	-e 's/\(\[WARN\].*\)/[33m\1[0m/g' \
+	-e 's/\(\[WARNING\].*\)/[33m\1[0m/g' \
 	-e 's/\(\[INFO\].*\)/[1;34m\1[0m/g' \
 	-e 's/\(\[ERROR\].*\)/[1;31m\1[0m/g' \
 	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: 0/s/\(.*\)/[0;32m\1[0m/g' \
