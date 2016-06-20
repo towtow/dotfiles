@@ -4,6 +4,8 @@
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
+umask 022
+
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
@@ -25,32 +27,32 @@ function fixsandbox {
 }
 function color_maven {
     $M2_HOME/bin/mvn $* | sed \
-	-e 's/\(\[WARN\].*\)/[33m\1[0m/g' \
-	-e 's/\(\[WARNING\].*\)/[33m\1[0m/g' \
-	-e 's/\(\[INFO\].*\)/[1;34m\1[0m/g' \
-	-e 's/\(\[ERROR\].*\)/[1;31m\1[0m/g' \
-	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: 0/s/\(.*\)/[0;32m\1[0m/g' \
-	-e '/Tests run.*Failures: [^0].*, Errors: 0, Skipped: 0/s/\(.*\)/[0;31m\1[0m/g' \
-	-e '/Tests run.*Failures: 0, Errors: [^0], Skipped: 0/s/\(.*\)/[0;31m\1[0m/g' \
-	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: [^0]/s/\(.*\)/[0;33m\1[0m/g'
-    # [0;31m red[0m
-    # [0;32m green[0m
-    # [0;33m yellow[0m
-    # [0;37m white[0m
+	-e 's/\(\[WARN\].*\)/\1/g' \
+	-e 's/\(\[WARNING\].*\)/\1/g' \
+	-e 's/\(\[INFO\].*\)/\1/g' \
+	-e 's/\(\[ERROR\].*\)/\1/g' \
+	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: 0/s/\(.*\)/\1/g' \
+	-e '/Tests run.*Failures: [^0].*, Errors: 0, Skipped: 0/s/\(.*\)/\1/g' \
+	-e '/Tests run.*Failures: 0, Errors: [^0], Skipped: 0/s/\(.*\)/\1/g' \
+	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: [^0]/s/\(.*\)/\1/g'
+    #  red
+    #  green
+    #  yellow
+    #  white
 }
-
 alias ls="ls --color"
 alias grep="grep --color=always"
 alias less="less -R"
 alias vi="vim"
-alias sqlplus="rlwrap $ORACLE_HOME/bin/sqlplus"
+alias sqlplus="rlwrap /opt/instantclient/sqlplus"
 alias idea="/opt/idea/bin/idea.sh >/dev/null 2>&1 &"
-alias e="emacsclient"
+alias e="emacsclient --no-wait"
 alias nslookup="rlwrap /usr/bin/nslookup"
-alias tdb="sqlplus tow_trunk/tow_trunk@//localhost:1521/XE"
-alias b1db="sqlplus tow_branch1/tow_branch1@//localhost:1521/XE"
-alias b2db="sqlplus tow_branch2/tow_branch2@//localhost:1521/XE"
-alias rdb="sqlplus tow_release/tow_release@//localhost:1521/XE"
+alias dba="sqlplus system/NevrL8@localhost:1521/xe"
+alias tdb="sqlplus tow_trunk/tow_trunk@localhost:1521/xe"
+alias b1db="sqlplus tow_branch1/tow_branch1@localhost:1521/xe"
+alias b2db="sqlplus tow_branch2/tow_branch2@localhost:1521/xe"
+alias rdb="sqlplus tow_release/tow_release@localhost:1521/xe"
 alias t="cd ~/ng/trunk"
 alias b1="cd ~/ng/branch1"
 alias b2="cd ~/ng/branch2"
@@ -59,7 +61,6 @@ alias tjb="cd ~/ng/trunk/local/jboss/bin ; ./run.sh"
 alias b1jb="cd ~/ng/branch1/local/jboss/bin ; ./run.sh"
 alias b2jb="cd ~/ng/branch2/local/jboss/bin ; ./run.sh"
 alias rjb="cd ~/ng/release/local/jboss/bin ; ./run.sh"
-alias forge=~/dev/TriggerToolkit/forge
 alias nocaps="setxkbmap -option caps:none"
 alias f="find . -name"
 alias l="ls -l"
@@ -71,6 +72,11 @@ alias mkknownhosts="scp root@monitoring.prod.dc.local:/etc/ssh/ssh_known_hosts /
 alias v="evince >/dev/null 2>&1"
 alias mvn=color_maven
 alias maven=$M2_HOME/bin/mvn
+alias sshpw="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
+alias ipmi="~/IPMIView_V2.10.2_bundleJRE_Linux_x64_20150909/IPMIView20"
+alias pm-mobile="nvm use pm-mobile ; export ANDROID_HOME=/opt/android-sdk ; export JAVA_HOME=/opt/java8 ; export PATH=\${ANDROID_HOME}/platform-tools:\${ANDROID_HOME}/tools:\${PATH} ; export LD_LIBRARY_PATH=\${ANDROID_HOME}/tools/lib64 ; cd ~/ng/pm-mobile"
+alias geny='/opt/genymobile/genymotion/genymotion >/dev/null 2>&1 &'
+alias d=docker
 
 # Bash history settings
 export HISTFILESIZE=1000000
@@ -137,12 +143,13 @@ function settitle() {
 export EDITOR=emacsclient
 export PROMPT_COMMAND='settitle; git_branch; svn_branch; history -a;'
 # git+svn - export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]${gitbranch}\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
-export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
+# svn only - export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
+export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]${gitbranch}\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
 export PS2=' | '
 
 eval `dircolors ~/.dir_colors`
 
-[[ -s "/home/tow/.gvm/bin/gvm-init.sh" ]] && source "/home/tow/.gvm/bin/gvm-init.sh"
+[[ -s "/home/tow/.sdkman/bin/sdkman-init.sh" ]] && source "/home/tow/.sdkman/bin/sdkman-init.sh"
 
 export NVM_DIR="/home/tow/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -150,7 +157,7 @@ export NVM_DIR="/home/tow/.nvm"
 export TERM=xterm
 
 preexec () {
-    echo -n "[1;34m[0m" && :;
+    echo -n "" && :;
 }
 preexec_invoke_exec () {
     [ -n "$COMP_LINE" ] && return  # do nothing if completing
@@ -159,3 +166,7 @@ preexec_invoke_exec () {
     preexec "$this_command"
 }
 trap 'preexec_invoke_exec' DEBUG
+
+export ANT_OPTS="$ANT_OPTS -XX:MaxPermSize=1g"
+
+export PATH=$PATH:/home/tow/.gem/ruby/2.1.0/bin:/home/tow/.gem/ruby/2.3.0/bin
