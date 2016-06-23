@@ -27,18 +27,23 @@ function fixsandbox {
 }
 function color_maven {
     $M2_HOME/bin/mvn $* | sed \
-	-e 's/\(\[WARN\].*\)/\1/g' \
-	-e 's/\(\[WARNING\].*\)/\1/g' \
-	-e 's/\(\[INFO\].*\)/\1/g' \
-	-e 's/\(\[ERROR\].*\)/\1/g' \
-	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: 0/s/\(.*\)/\1/g' \
-	-e '/Tests run.*Failures: [^0].*, Errors: 0, Skipped: 0/s/\(.*\)/\1/g' \
-	-e '/Tests run.*Failures: 0, Errors: [^0], Skipped: 0/s/\(.*\)/\1/g' \
-	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: [^0]/s/\(.*\)/\1/g'
-    #  red
-    #  green
-    #  yellow
-    #  white
+	-e 's/\(\[WARN\].*\)/[33m\1[0m/g' \
+	-e 's/\(\[WARNING\].*\)/[33m\1[0m/g' \
+	-e 's/\(\[INFO\].*\)/[1;34m\1[0m/g' \
+	-e 's/\(\[ERROR\].*\)/[1;31m\1[0m/g' \
+	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: 0/s/\(.*\)/[0;32m\1[0m/g' \
+	-e '/Tests run.*Failures: [^0].*, Errors: 0, Skipped: 0/s/\(.*\)/[0;31m\1[0m/g' \
+	-e '/Tests run.*Failures: 0, Errors: [^0], Skipped: 0/s/\(.*\)/[0;31m\1[0m/g' \
+	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: [^0]/s/\(.*\)/[0;33m\1[0m/g'
+    # [0;31m red[0m
+    # [0;32m green[0m
+    # [0;33m yellow[0m
+    # [0;37m white[0m
+}
+function use_java() {
+    export JAVA_HOME=$1
+    export PATH=$JAVA_HOME/bin:$PATH
+    java -version
 }
 alias ls="ls --color"
 alias grep="grep --color=always"
@@ -77,6 +82,9 @@ alias ipmi="~/IPMIView_V2.10.2_bundleJRE_Linux_x64_20150909/IPMIView20"
 alias pm-mobile="nvm use pm-mobile ; export ANDROID_HOME=/opt/android-sdk ; export JAVA_HOME=/opt/java8 ; export PATH=\${ANDROID_HOME}/platform-tools:\${ANDROID_HOME}/tools:\${PATH} ; export LD_LIBRARY_PATH=\${ANDROID_HOME}/tools/lib64 ; cd ~/ng/pm-mobile"
 alias geny='/opt/genymobile/genymotion/genymotion >/dev/null 2>&1 &'
 alias d=docker
+alias j6='use_java /opt/java6'
+alias j7='use_java /opt/java7'
+alias j8='use_java /opt/java8'
 
 # Bash history settings
 export HISTFILESIZE=1000000
@@ -157,7 +165,7 @@ export NVM_DIR="/home/tow/.nvm"
 export TERM=xterm
 
 preexec () {
-    echo -n "" && :;
+    echo -n "[1;34m[0m" && :;
 }
 preexec_invoke_exec () {
     [ -n "$COMP_LINE" ] && return  # do nothing if completing
