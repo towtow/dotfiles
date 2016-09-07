@@ -180,11 +180,13 @@ abs-menulinks = svn:eol-style=native
 *.ihtml = svn:eol-style=native
 *.in = svn:eol-style=native
 *.java = svn:eol-style=native
+*.jdo = svn:eol-style=native
 *.jmx = svn:eol-style=LF
 *.jpg = svn:mime-type=image/jpeg
 *.jsp = svn:eol-style=native
 *.jspf = svn:eol-style=native
 *.js = svn:eol-style=native
+*.jsx = svn:eol-style=native
 *.junit = svn:eol-style=native
 *.jx = svn:eol-style=native
 *.m = svn:eol-style=native
@@ -230,7 +232,8 @@ abs-menulinks = svn:eol-style=native
 *.sh = svn:eol-style=native;svn:executable=*
 *.sql = svn:eol-style=native
 *.svg = svn:eol-style=native
-*.swc = svn:mime-type=application/octet-stream 
+*.swc = svn:mime-type=application/octet-stream
+*.tag = svn:eol-style=native
 *.tar = svn:mime-type=application/octet-stream
 *.tgz = svn:mime-type=application/octet-stream
 *.tif = svn:mime-type=image/tiff
@@ -253,7 +256,6 @@ abs-menulinks = svn:eol-style=native
 *.xlog = svn:eol-style=native
 *.xmap = svn:eol-style=native
 *.xml = svn:eol-style=native
-*.jdo = svn:eol-style=native
 *.xpm = svn:eol-style=native
 *.xroles = svn:eol-style=native
 *.xsamples = svn:eol-style=native
