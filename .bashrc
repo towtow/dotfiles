@@ -82,9 +82,9 @@ alias ipmi="~/IPMIView_V2.10.2_bundleJRE_Linux_x64_20150909/IPMIView20"
 alias pm-mobile="nvm use pm-mobile ; export ANDROID_HOME=/opt/android-sdk ; export JAVA_HOME=/opt/java8 ; export PATH=\${ANDROID_HOME}/platform-tools:\${ANDROID_HOME}/tools:\${PATH} ; export LD_LIBRARY_PATH=\${ANDROID_HOME}/tools/lib64 ; cd ~/ng/pm-mobile"
 alias geny='/opt/genymobile/genymotion/genymotion >/dev/null 2>&1 &'
 alias d=docker
-alias j6='use_java /opt/java6'
-alias j7='use_java /opt/java7'
-alias j8='use_java /opt/java8'
+alias j6='use_java /usr/lib/jvm/java-6-oracle'
+alias j7='use_java /usr/lib/jvm/java-7-oracle'
+alias j8='use_java /usr/lib/jvm/java-8-oracle'
 
 # Bash history settings
 export HISTFILESIZE=1000000
@@ -174,7 +174,5 @@ preexec_invoke_exec () {
     preexec "$this_command"
 }
 trap 'preexec_invoke_exec' DEBUG
-
-export ANT_OPTS="$ANT_OPTS -XX:MaxPermSize=1g"
 
 export PATH=$PATH:/home/tow/.gem/ruby/2.1.0/bin:/home/tow/.gem/ruby/2.3.0/bin
