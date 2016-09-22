@@ -170,6 +170,7 @@ abs-menulinks = svn:eol-style=native
 *.gif = svn:mime-type=image/gif
 *.grm = svn:eol-style=native
 *.groovy = svn:eol-style=native
+*.gsp = svn:eol-style=native
 *.gz = svn:mime-type=application/x-gzip
 *.h = svn:eol-style=native
 *.htc = svn:eol-style=native
