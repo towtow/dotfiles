@@ -26,7 +26,7 @@ function fixsandbox {
     echo Fixed.
 }
 function color_maven {
-    $M2_HOME/bin/mvn $* | sed \
+    /usr/bin/mvn $* | sed \
 	-e 's/\(\[WARN\].*\)/[33m\1[0m/g' \
 	-e 's/\(\[WARNING\].*\)/[33m\1[0m/g' \
 	-e 's/\(\[INFO\].*\)/[1;34m\1[0m/g' \
@@ -76,7 +76,7 @@ alias fresh="a clean undeploy makeAll freshEnv"
 alias mkknownhosts="scp root@monitoring.prod.dc.local:/etc/ssh/ssh_known_hosts /home/tow/.ssh/known_hosts && cat /home/tow/.ssh/additional_known_hosts >>/home/tow/.ssh/known_hosts"
 alias v="evince >/dev/null 2>&1"
 alias mvn=color_maven
-alias maven=$M2_HOME/bin/mvn
+alias maven=/usr/bin/mvn
 alias sshpw="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
 alias ipmi="~/IPMIView_V2.10.2_bundleJRE_Linux_x64_20150909/IPMIView20"
 alias pm-mobile="nvm use pm-mobile ; export ANDROID_HOME=/opt/android-sdk ; export JAVA_HOME=/opt/java8 ; export PATH=\${ANDROID_HOME}/platform-tools:\${ANDROID_HOME}/tools:\${PATH} ; export LD_LIBRARY_PATH=\${ANDROID_HOME}/tools/lib64 ; cd ~/ng/pm-mobile"
