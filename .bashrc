@@ -98,17 +98,6 @@ shopt -s histappend
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# get current git branch name
-function git_branch {
-    export gitbranch=[$(git rev-parse --abbrev-ref HEAD 2>/dev/null)]
-    if [ "$?" -ne 0 ]
-      then gitbranch=
-    fi
-    if [[ "${gitbranch}" == "[]" ]]
-      then gitbranch=
-    fi
-}
-
 function svn_branch {
   export svnbranch=[$(svn info 2>/dev/null | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk' | egrep -o '[^/]+$' | sed -e 's/\(.*\)/\1/')]
     if [ "$?" -ne 0 ]
@@ -149,10 +138,10 @@ function settitle() {
 }
  
 export EDITOR=emacsclient
-export PROMPT_COMMAND='settitle; git_branch; svn_branch; history -a;'
-# git+svn - export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]${gitbranch}\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
+export PROMPT_COMMAND='settitle; svn_branch; history -a;'
+# git+svn - export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]$(__git_ps1 "[%s]")\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
 # svn only - export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
-export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]${gitbranch}\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
+export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]$(__git_ps1 "[%s]")\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
 export PS2=' | '
 
 eval `dircolors ~/.dir_colors`
