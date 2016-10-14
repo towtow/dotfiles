@@ -86,7 +86,7 @@ alias j6='use_java /usr/lib/jvm/java-6-oracle'
 alias j7='use_java /usr/lib/jvm/java-7-oracle'
 alias j8='use_java /usr/lib/jvm/java-8-oracle'
 alias mm='mvn -Pdev -Ptest -DskipTests'
-alias mdep='mm dependency:tree'
+alias mdep='mm dependency:tree -Dverbose'
 
 # Bash history settings
 export HISTFILESIZE=1000000
