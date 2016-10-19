@@ -79,7 +79,7 @@ alias mvn=color_maven
 alias maven=/usr/bin/mvn
 alias sshpw="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
 alias ipmi="~/IPMIView_V2.10.2_bundleJRE_Linux_x64_20150909/IPMIView20 >/dev/null 2>&1 </dev/null &"
-alias pm-mobile="nvm use pm-mobile ; export ANDROID_HOME=/opt/android-sdk ; export JAVA_HOME=/opt/java8 ; export PATH=\${ANDROID_HOME}/platform-tools:\${ANDROID_HOME}/tools:\${PATH} ; export LD_LIBRARY_PATH=\${ANDROID_HOME}/tools/lib64 ; cd ~/ng/pm-mobile"
+alias pm-mobile="nvm use pm-mobile ; export ANDROID_HOME=/opt/android-sdk ; j8 ; export PATH=\${ANDROID_HOME}/platform-tools:\${ANDROID_HOME}/tools:\${PATH} ; export LD_LIBRARY_PATH=\${ANDROID_HOME}/tools/lib64 ; cd ~/ng/pm-mobile"
 alias geny='/opt/genymobile/genymotion/genymotion >/dev/null 2>&1 &'
 alias d=docker
 alias j6='use_java /usr/lib/jvm/java-6-oracle'
