@@ -120,6 +120,14 @@ function user_color {
         usercolor="[0;32m";
     fi
 }
+
+function grepjars {
+    if [ -z "$1" ] ; then
+	echo "Usage: grepjars <Pattern>"
+    else
+	for i in *.?ar ; do jar tvf $i | grep $1 && echo $i ; done
+    fi
+}
  
 # Set prompt and window title
 inputcolor='[0;37m'
