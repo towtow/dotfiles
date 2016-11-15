@@ -66,7 +66,6 @@ alias tjb="cd ~/ng/trunk/local/jboss/bin ; ./run.sh"
 alias b1jb="cd ~/ng/branch1/local/jboss/bin ; ./run.sh"
 alias b2jb="cd ~/ng/branch2/local/jboss/bin ; ./run.sh"
 alias rjb="cd ~/ng/release/local/jboss/bin ; ./run.sh"
-alias nocaps="setxkbmap -option caps:none"
 alias f="find . -name"
 alias l="ls -l"
 alias a="ant -DskipTests=true"
@@ -175,3 +174,6 @@ preexec_invoke_exec () {
 trap 'preexec_invoke_exec' DEBUG
 
 export PATH=$PATH:/home/tow/.gem/ruby/2.1.0/bin:/home/tow/.gem/ruby/2.3.0/bin
+export SQLPATH=/home/tow/.sqlplus
+
+setxkbmap -option caps:none
