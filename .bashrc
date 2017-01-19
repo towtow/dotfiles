@@ -72,9 +72,9 @@ alias rdb="sqlplus tow_release/tow_release@localhost:1521/xe"
 alias f="find . -name"
 alias l="ls -l"
 alias a="ant -DskipTests=true"
-alias m="a makeAll"
-alias cm="a clean undeploy makeAll"
-alias fresh="a clean undeploy makeAll freshEnv"
+alias m="a makeAll deploy"
+alias cm="a clean undeploy makeAll deploy"
+alias fresh="a clean undeploy makeAll deploy freshEnv"
 alias mkknownhosts="scp root@monitoring.prod.dc.local:/etc/ssh/ssh_known_hosts /home/tow/.ssh/known_hosts && cat /home/tow/.ssh/additional_known_hosts >>/home/tow/.ssh/known_hosts"
 alias v="evince >/dev/null 2>&1"
 alias mvn=color_maven
@@ -89,7 +89,7 @@ alias j7='use_java /usr/lib/jvm/java-7-oracle'
 alias j8='use_java /usr/lib/jvm/java-8-oracle'
 alias mm='mvn -Pdev -Ptest -DskipTests'
 alias mdep='mm dependency:tree -Dverbose'
-
+alias gitsvnup='git co master && git svn fetch && git svn rebase && git co work && git rebase master'
 # Bash history settings
 export HISTFILESIZE=1000000
 export HISTSIZE=100000
