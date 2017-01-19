@@ -90,6 +90,8 @@ alias j8='use_java /usr/lib/jvm/java-8-oracle'
 alias mm='mvn -Pdev -Ptest -DskipTests'
 alias mdep='mm dependency:tree -Dverbose'
 alias gitsvnup='git co master && git svn fetch && git svn rebase && git co work && git rebase master'
+alias gm='g && git co master'
+alias gw='g && git co work'
 # Bash history settings
 export HISTFILESIZE=1000000
 export HISTSIZE=100000
