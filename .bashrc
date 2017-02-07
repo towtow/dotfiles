@@ -89,9 +89,13 @@ alias j7='use_java /usr/lib/jvm/java-7-oracle'
 alias j8='use_java /usr/lib/jvm/java-8-oracle'
 alias mm='mvn -Pdev -Ptest -DskipTests'
 alias mdep='mm dependency:tree -Dverbose'
-alias gitsvnup='git co master && git svn fetch && git svn rebase && git co work && git rebase master'
+alias gitsvnup='git co master && git svn fetch && git svn rebase && git co release && git svn fetch && git svn rebase && git co work && git rebase master'
 alias gm='g && git co master'
 alias gw='g && git co work'
+alias prod='ssh root@monitoring.prod.dc.local'
+alias ref='ssh root@hadoop.ref.dc.local'
+alias jp9='~/jprofiler9/bin/jprofiler >/dev/null 2>&1 </dev/null &'
+
 # Bash history settings
 export HISTFILESIZE=1000000
 export HISTSIZE=100000
@@ -132,7 +136,16 @@ function grepjars {
 	for i in *.?ar ; do jar tvf $i | grep $1 && echo $i ; done
     fi
 }
- 
+
+function jcprod {
+    local SSHPID
+    ssh -fN -D 7778 root@ng${1}.prod.dc.local &
+    SSHPID=$!
+    sleep 3
+    jconsole -J-DsocksProxyHost=localhost -J-DsocksProxyPort=7778 service:jmx:rmi:///jndi/rmi://localhost:8282/jmxrmi -J-DsocksNonProxyHosts=
+    kill $SSHPID
+}
+
 # Set prompt and window title
 inputcolor='[0;37m'
 cwdcolor='[0;34m'
@@ -178,7 +191,7 @@ preexec_invoke_exec () {
 }
 trap 'preexec_invoke_exec' DEBUG
 
-export PATH=$PATH:/home/tow/.gem/ruby/2.1.0/bin:/home/tow/.gem/ruby/2.3.0/bin
+export PATH=/home/tow/bin:$PATH:/home/tow/.gem/ruby/2.1.0/bin:/home/tow/.gem/ruby/2.3.0/bin
 export SQLPATH=/home/tow/.sqlplus
 
 setxkbmap -option caps:none
