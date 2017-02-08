@@ -146,6 +146,28 @@ function jcprod {
     kill $SSHPID
 }
 
+function svn-old-branches {
+    local twoweeksago=$(date -I -d '2 weeks ago')
+    svn-branch-creation-dates | (
+	while read i ; do
+	    local x=($i)
+	    if [ "${x[0]}" \< "$twoweeksago" ] ; then
+		echo $i
+	    fi
+	done
+    )
+}
+
+function svn-branch-creation-dates {
+    (for i in $(svn ls svn://svn.muc.local/ng.platform/branches) ; do
+	 echo "$(svn-branch-creation-date ${i}) ${i}"
+     done)|sort -k1
+}
+
+function svn-branch-creation-date {
+    echo "$(svn log --stop-on-copy --xml svn://svn.muc.local/ng.platform/branches/${1}|xmllint --xpath '//logentry[last()]/date/text()' -|cut -dT -f1)"
+}
+
 # Set prompt and window title
 inputcolor='[0;37m'
 cwdcolor='[0;34m'
