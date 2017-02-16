@@ -139,7 +139,7 @@ function grepjars {
 
 function jcprod {
     local SSHPID
-    ssh -fN -D 7778 root@ng${1}.prod.dc.local &
+    ssh -N -D 7778 root@ng${1}.prod.dc.local &
     SSHPID=$!
     sleep 3
     jconsole -J-DsocksProxyHost=localhost -J-DsocksProxyPort=7778 service:jmx:rmi:///jndi/rmi://localhost:8282/jmxrmi -J-DsocksNonProxyHosts=
