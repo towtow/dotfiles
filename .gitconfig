@@ -3,3 +3,17 @@
 	email = tow@conject.com
 [push]
 	default = simple
+[alias]
+	st = status
+	ci = commit
+	co = checkout
+	br = branch
+[color]
+	ui = auto
+	diff = auto
+	status = auto
+	branch = auto
+[pull]
+	rebase = true
+[log]
+	date = local

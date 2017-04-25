@@ -53,7 +53,7 @@ alias sqlplus="rlwrap /opt/instantclient/sqlplus"
 alias idea="/opt/idea/bin/idea.sh >/dev/null 2>&1 &"
 alias e="emacsclient --no-wait"
 alias nslookup="rlwrap /usr/bin/nslookup"
-alias dba="sqlplus system/NevrL8@localhost:1521/xe"
+alias dba="sqlplus sys/NevrL8@localhost:1521/xe as sysdba"
 alias g="cd ~/ng/git"
 alias gjb="cd ~/ng/git/local/jboss/bin ; ./run.sh"
 alias gdb="sqlplus tow_git/tow_git@localhost:1521/xe"
@@ -95,6 +95,7 @@ alias gw='g && git co work'
 alias prod='ssh root@monitoring.prod.dc.local'
 alias ref='ssh root@hadoop.ref.dc.local'
 alias jp9='~/jprofiler9/bin/jprofiler >/dev/null 2>&1 </dev/null &'
+alias mvnrelease='mvn --batch-mode release:prepare release:perform'
 
 # Bash history settings
 export HISTFILESIZE=1000000
@@ -166,6 +167,18 @@ function svn-branch-creation-dates {
 
 function svn-branch-creation-date {
     echo "$(svn log --stop-on-copy --xml svn://svn.muc.local/ng.platform/branches/${1}|xmllint --xpath '//logentry[last()]/date/text()' -|cut -dT -f1)"
+}
+
+function sshp {
+    ssh root@${1}.prod.dc.local
+}
+
+function sshr {
+    ssh root@${1}.ref.dc.local
+}
+
+function sshdc {
+    ssh root@${1}.dc.local
 }
 
 # Set prompt and window title
