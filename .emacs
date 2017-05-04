@@ -36,3 +36,13 @@
 (global-set-key (kbd "C-M-<next>") 'next-buffer)
 (global-set-key (kbd "C-M-<prior>") 'previous-buffer)
 (global-unset-key (kbd "C-x C-c"))
+
+(setq line-number-display-limit-width 2000000)
+
+(eval-after-load "sql"
+  '(load-library "sql-indent"))
+
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+
+(setq yaml-indent-offset 4)

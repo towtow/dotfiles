@@ -17,3 +17,5 @@
 	rebase = true
 [log]
 	date = local
+[svn]
+	rmdir = true
