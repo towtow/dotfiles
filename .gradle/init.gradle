@@ -1,0 +1,26 @@
+class ConjectRepositoryPlugin implements Plugin {
+
+    final static String CONJECT_REPO_NAME = 'conject-maven-public'
+    final static String CONJECT_REPO_URL = 'http://repo.muc.local/repository/maven-public/'
+
+    void apply(gradle) {
+        final defineConjectRepo = {
+            all {
+                if (it.name != CONJECT_REPO_NAME) {
+                    remove it
+                }
+            }
+            maven {
+                name = CONJECT_REPO_NAME
+                url = CONJECT_REPO_URL
+            }
+        }
+
+        gradle.allprojects { project ->
+            project.repositories defineConjectRepo
+            project.buildscript.repositories defineConjectRepo
+        }
+    }
+}
+
+apply plugin: ConjectRepositoryPlugin

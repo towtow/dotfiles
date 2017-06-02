@@ -97,7 +97,7 @@ alias prod='ssh root@monitoring.prod.dc.local'
 alias ref='ssh root@hadoop.ref.dc.local'
 alias jp9='~/jprofiler9/bin/jprofiler >/dev/null 2>&1 </dev/null &'
 alias mvnrelease='mvn --batch-mode release:prepare release:perform'
-
+alias xmind='j8 >/dev/null 2>&1 && cd /home/tow/bin/XMind/XMind_amd64 && ./XMind >/dev/null 2>&1 </dev/null &'
 # Bash history settings
 export HISTFILESIZE=1000000
 export HISTSIZE=100000
@@ -171,15 +171,24 @@ function svn-branch-creation-date {
 }
 
 function sshp {
-    ssh root@${1}.prod.dc.local
+    local host
+    host=${1}
+    shift
+    ssh root@${host}.prod.dc.local "$*"
 }
 
 function sshr {
-    ssh root@${1}.ref.dc.local
+    local host
+    host=${1}
+    shift
+    ssh root@${host}.ref.dc.local "$*"
 }
 
 function sshdc {
-    ssh root@${1}.dc.local
+    local host
+    host=${1}
+    shift
+    ssh root@${host}.dc.local "$*"
 }
 
 # Set prompt and window title
