@@ -8,6 +8,8 @@ umask 022
 
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
+    . /usr/share/bash-completion/completions/docker 
+    complete -F _docker d
 fi
 
 function cleansandbox {
@@ -60,12 +62,6 @@ alias gdb="sqlplus tow_git/tow_git@localhost:1521/xe"
 alias t="cd ~/ng/trunk"
 alias tjb="cd ~/ng/trunk/local/jboss/bin ; ./run.sh"
 alias tdb="sqlplus tow_trunk/tow_trunk@localhost:1521/xe"
-alias b1="cd ~/ng/branch1"
-alias b1jb="cd ~/ng/branch1/local/jboss/bin ; ./run.sh"
-alias b1db="sqlplus tow_branch1/tow_branch1@localhost:1521/xe"
-alias b2="cd ~/ng/branch2"
-alias b2jb="cd ~/ng/branch2/local/jboss/bin ; ./run.sh"
-alias b2db="sqlplus tow_branch2/tow_branch2@localhost:1521/xe"
 alias r="cd ~/ng/release"
 alias rjb="cd ~/ng/release/local/jboss/bin ; ./run.sh"
 alias rdb="sqlplus tow_release/tow_release@localhost:1521/xe"
@@ -82,12 +78,14 @@ alias maven=/usr/bin/mvn
 alias mvnrelease="maven --batch-mode release:prepare && maven --batch-mode release:perform"
 alias sshpw="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
 alias ipmi="~/IPMIView_2.12.0_build.160804_bundleJRE_Linux_x64/IPMIView20 >/dev/null 2>&1 </dev/null &"
-alias pm-mobile="nvm use pm-mobile ; export ANDROID_HOME=/opt/android-sdk ; j8 ; export PATH=\${ANDROID_HOME}/platform-tools:\${ANDROID_HOME}/tools:\${PATH} ; export LD_LIBRARY_PATH=\${ANDROID_HOME}/tools/lib64 ; cd ~/ng/pm-mobile"
+alias android="export ANDROID_HOME=/opt/android-sdk ; export PATH=\${ANDROID_HOME}/platform-tools:\${ANDROID_HOME}/tools:\${PATH} ; export LD_LIBRARY_PATH=\${ANDROID_HOME}/tools/lib64 ; j8"
+alias pm-mobile="andoird ; nvm use pm-mobile ; cd ~/ng/pm-mobile"
 alias geny='/opt/genymobile/genymotion/genymotion >/dev/null 2>&1 &'
 alias d=docker
 alias j6='use_java /usr/lib/jvm/java-6-oracle'
 alias j7='use_java /usr/lib/jvm/java-7-oracle'
 alias j8='use_java /usr/lib/jvm/java-8-oracle'
+alias j9='use_java /usr/lib/jvm/java-9-oracle'
 alias mm='mvn -Pdev -Ptest -DskipTests'
 alias mdep='mm dependency:tree -Dverbose'
 alias gitsvnup='git co master && git svn fetch && git svn rebase && git co release && git svn fetch && git svn rebase && git co work && git rebase master'
@@ -102,7 +100,7 @@ alias xmind='j8 >/dev/null 2>&1 && cd /home/tow/bin/XMind/XMind_amd64 && ./XMind
 export HISTFILESIZE=1000000
 export HISTSIZE=100000
 export HISTCONTROL=ignoredups:ignorespace
-export HISTIGNORE='ls:history:ll'
+export HISTIGNORE='ls:history:ll:secret-tool'
 export HISTTIMEFORMAT='%F %T '
 # Append to bash_history instead of overwriting
 shopt -s histappend
@@ -239,4 +237,5 @@ trap 'preexec_invoke_exec' DEBUG
 export PATH=/home/tow/bin:$PATH:/home/tow/.gem/ruby/2.1.0/bin:/home/tow/.gem/ruby/2.3.0/bin
 export SQLPATH=/home/tow/.sqlplus
 
-setxkbmap -option caps:none
+export ACONEX_PRIVATE_DOCKER_REGISTRY=dockerhub.muc.local
+export ACONEX_DOCKER_HUB_MIRROR=dockerhub.muc.local
