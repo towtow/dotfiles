@@ -27,21 +27,6 @@ function fixsandbox {
     svn st
     echo Fixed.
 }
-function color_maven {
-    /usr/bin/mvn $* | sed \
-	-e 's/\(\[WARN\].*\)/[33m\1[0m/g' \
-	-e 's/\(\[WARNING\].*\)/[33m\1[0m/g' \
-	-e 's/\(\[INFO\].*\)/[1;34m\1[0m/g' \
-	-e 's/\(\[ERROR\].*\)/[1;31m\1[0m/g' \
-	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: 0/s/\(.*\)/[0;32m\1[0m/g' \
-	-e '/Tests run.*Failures: [^0].*, Errors: 0, Skipped: 0/s/\(.*\)/[0;31m\1[0m/g' \
-	-e '/Tests run.*Failures: 0, Errors: [^0], Skipped: 0/s/\(.*\)/[0;31m\1[0m/g' \
-	-e '/Tests run.*Failures: 0, Errors: 0, Skipped: [^0]/s/\(.*\)/[0;33m\1[0m/g'
-    # [0;31m red[0m
-    # [0;32m green[0m
-    # [0;33m yellow[0m
-    # [0;37m white[0m
-}
 function use_java() {
     export JAVA_HOME=$1
     export PATH=$JAVA_HOME/bin:$PATH
@@ -73,20 +58,15 @@ alias cm="a clean makeAll"
 alias fresh="a clean makeAll freshEnv"
 alias mkknownhosts="scp root@monitoring.prod.dc.local:/etc/ssh/ssh_known_hosts /home/tow/.ssh/known_hosts && cat /home/tow/.ssh/additional_known_hosts >>/home/tow/.ssh/known_hosts"
 alias v="evince >/dev/null 2>&1"
-alias mvn=color_maven
-alias maven=/usr/bin/mvn
-alias mvnrelease="maven --batch-mode release:prepare && maven --batch-mode release:perform"
 alias sshpw="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
 alias ipmi="~/IPMIView_2.12.0_build.160804_bundleJRE_Linux_x64/IPMIView20 >/dev/null 2>&1 </dev/null &"
 alias android="export ANDROID_HOME=/opt/android-sdk ; export PATH=\${ANDROID_HOME}/platform-tools:\${ANDROID_HOME}/tools:\${PATH} ; export LD_LIBRARY_PATH=\${ANDROID_HOME}/tools/lib64 ; j8"
-alias pm-mobile="andoird ; nvm use pm-mobile ; cd ~/ng/pm-mobile"
+alias pm-mobile="android ; nvm use pm-mobile ; cd ~/ng/pm-mobile"
 alias geny='/opt/genymobile/genymotion/genymotion >/dev/null 2>&1 &'
 alias d=docker
-alias j6='use_java /usr/lib/jvm/java-6-oracle'
-alias j7='use_java /usr/lib/jvm/java-7-oracle'
 alias j8='use_java /usr/lib/jvm/java-8-oracle'
-alias j9='use_java /usr/lib/jvm/java-9-oracle'
-alias mm='mvn -Pdev -Ptest -DskipTests'
+alias j11='use_java /usr/lib/jvm/jdk-11.0.1'
+alias mm='./mvnw -Pdev -Ptest -DskipTests'
 alias mdep='mm dependency:tree -Dverbose'
 alias gitsvnup='git co master && git svn fetch && git svn rebase && git co release && git svn fetch && git svn rebase && git co work && git rebase master'
 alias gm='g && git co master'
@@ -94,8 +74,20 @@ alias gw='g && git co work'
 alias prod='ssh root@monitoring.prod.dc.local'
 alias ref='ssh root@hadoop.ref.dc.local'
 alias jp9='~/jprofiler9/bin/jprofiler >/dev/null 2>&1 </dev/null &'
-alias mvnrelease='mvn --batch-mode release:prepare release:perform'
+alias mvnrelease='./mvnw --batch-mode release:prepare release:perform'
 alias xmind='j8 >/dev/null 2>&1 && cd /home/tow/bin/XMind/XMind_amd64 && ./XMind >/dev/null 2>&1 </dev/null &'
+alias freeplane='j11 >/dev/null 2>&1 && /usr/bin/freeplane >/dev/null 2>&1 </dev/null &'
+alias ociimages='oci compute image list | jq '"'"'.data[] | ."display-name", .id'"'"
+alias firefox='/usr/bin/firefox --new-instance'
+alias bastion-dev='ssh -i ~/.ssh/id_rsa_bastion twildgru@129.146.155.40'
+alias bastion-prod='ssh -i ~/.ssh/id_rsa_bastion twildgru@129.213.76.211'
+alias bastion-dev-ff='ssh -i ~/.ssh/id_rsa_bastion -fN -D 5555 twildgru@129.146.155.40 ; firefox -P proxy-bastion-dev >/dev/null 2>&1 &'
+alias bastion-prod-ff='ssh -i ~/.ssh/id_rsa_bastion -fN -D 5554 twildgru@129.213.76.211 ; firefox -P proxy-bastion-prod >/dev/null 2>&1 &'
+alias cpm-ff='ssh -fN -D 5454 root@monitoring.prod.dc.local ; firefox -P proxy-cpm >/dev/null 2>&1 &'
+alias tap='terraform apply'
+alias p='cd ~/acx/package-management'
+alias install-mvnw='tar xf ~/.mvnw.tar'
+
 # Bash history settings
 export HISTFILESIZE=1000000
 export HISTSIZE=100000
@@ -209,8 +201,6 @@ function settitle() {
  
 export EDITOR=emacsclient
 export PROMPT_COMMAND='settitle; svn_branch; history -a;'
-# git+svn - export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]$(__git_ps1 "[%s]")\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
-# svn only - export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
 export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]$(__git_ps1 "[%s]")\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
 export PS2=' | '
 
@@ -234,8 +224,31 @@ preexec_invoke_exec () {
 }
 trap 'preexec_invoke_exec' DEBUG
 
-export PATH=/home/tow/bin:$PATH:/home/tow/.gem/ruby/2.1.0/bin:/home/tow/.gem/ruby/2.3.0/bin
-export SQLPATH=/home/tow/.sqlplus
+export PATH="$HOME/bin:$PATH"
 
+export TMUXIFIER_TMUX_OPTS="-f /dev/null"
+export PATH="$PATH:$HOME/.tmuxifier/bin"
+
+export SQLPATH=/home/tow/.sqlplus
 export ACONEX_PRIVATE_DOCKER_REGISTRY=dockerhub.muc.local
 export ACONEX_DOCKER_HUB_MIRROR=dockerhub.muc.local
+
+export PATH=/home/tow/bin:$PATH
+
+[[ -e "/home/tow/lib/oracle-cli/lib/python3.6/site-packages/oci_cli/bin/oci_autocomplete.sh" ]] && source "/home/tow/lib/oracle-cli/lib/python3.6/site-packages/oci_cli/bin/oci_autocomplete.sh"
+
+#export TF_VAR_tenancy_id=ocid1.tenancy.oc1..aaaaaaaa6gtmn46bketftho3sqcgrlvdfsenqemqy3urkbthlpkos54a6wsa
+#export TF_VAR_compartment_id=ocid1.compartment.oc1..aaaaaaaastzjsmkgsupv2w3qk6gximaoy54jhvvvc65sz7ohdz4cxc7og4ma
+export TF_VAR_user_id=ocid1.user.oc1..aaaaaaaay6en4prosyn5oe5gwvpdwzupm3nebonyjjbuwmm6fenlgnhf2xoq
+export TF_VAR_fingerprint=b7:f6:2b:8d:37:23:bf:06:02:de:e1:fa:cb:ed:b2:fd
+export TF_VAR_private_key=~/.oci/oci_api_key.pem
+export TF_VAR_bastion_user=twildgru
+
+function ocissh () {
+    ssh -R6666:localhost:54321 -i ~/.ssh/id_rsa -o ProxyCommand='ssh -W %h:%p -i ~/.ssh/id_rsa_bastion twildgru@129.146.155.40' opc@$1
+}
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+export PATH="/home/tow/Fortify/Fortify_SCA_and_Apps_18.20/bin:$PATH"
