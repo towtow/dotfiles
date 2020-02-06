@@ -4,86 +4,57 @@
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
-umask 022
+umask 0022
 
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
-    . /usr/share/bash-completion/completions/docker 
-    complete -F _docker d
-fi
+####################################################################################################################################
+# Environment
+####################################################################################################################################
+export PATH="$HOME/bin:/home/tow/Fortify/Fortify_SCA_and_Apps_19.2.0/bin:$PATH"
 
-function cleansandbox {
-    svn revert -R .
-    svn st | grep ^\? | cut -c3- | xargs rm -r 2>/dev/null
-    svn st
-    svn up
-    echo Cleaned.
-}
-function fixsandbox {
-    local SVNURL
-    SVNURL=`svn info | grep ^URL | cut -d' ' -f2`
-    find . -name .svn -type d -print0 2>/dev/null | xargs -0 rm -rf
-    svn co --force $SVNURL . >/dev/null
-    svn st
-    echo Fixed.
-}
+export PROMPT_COMMAND='history -a'
+
 function use_java() {
     export JAVA_HOME=$1
     export PATH=$JAVA_HOME/bin:$PATH
     java -version
 }
 alias ls="ls --color"
-alias grep="grep --color=always"
 alias less="less -R"
-alias vi="vim"
-alias sqlplus="rlwrap /opt/instantclient/sqlplus"
 alias idea="/opt/idea/bin/idea.sh >/dev/null 2>&1 &"
 alias e="emacsclient --no-wait"
 alias nslookup="rlwrap /usr/bin/nslookup"
-alias dba="sqlplus sys/NevrL8@localhost:1521/xe as sysdba"
-alias g="cd ~/ng/git"
-alias gjb="cd ~/ng/git/local/jboss/bin ; ./run.sh"
-alias gdb="sqlplus tow_git/tow_git@localhost:1521/xe"
-alias t="cd ~/ng/trunk"
-alias tjb="cd ~/ng/trunk/local/jboss/bin ; ./run.sh"
-alias tdb="sqlplus tow_trunk/tow_trunk@localhost:1521/xe"
-alias r="cd ~/ng/release"
-alias rjb="cd ~/ng/release/local/jboss/bin ; ./run.sh"
-alias rdb="sqlplus tow_release/tow_release@localhost:1521/xe"
+alias g="cd ~/ng/pm-platform"
 alias f="find . -name"
 alias l="ls -l"
-alias a="ant -DskipTests=true"
+alias at="ant -Dbuild.env=dev"
+alias a="at -DskipTests=true"
 alias m="a makeAll"
+alias mt="at makeAll"
 alias cm="a clean makeAll"
+alias cmt="at clean makeAll"
 alias fresh="a clean makeAll freshEnv"
-alias mkknownhosts="scp root@monitoring.prod.dc.local:/etc/ssh/ssh_known_hosts /home/tow/.ssh/known_hosts && cat /home/tow/.ssh/additional_known_hosts >>/home/tow/.ssh/known_hosts"
 alias v="evince >/dev/null 2>&1"
 alias sshpw="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
-alias ipmi="~/IPMIView_2.12.0_build.160804_bundleJRE_Linux_x64/IPMIView20 >/dev/null 2>&1 </dev/null &"
-alias android="export ANDROID_HOME=/opt/android-sdk ; export PATH=\${ANDROID_HOME}/platform-tools:\${ANDROID_HOME}/tools:\${PATH} ; export LD_LIBRARY_PATH=\${ANDROID_HOME}/tools/lib64 ; j8"
-alias pm-mobile="android ; nvm use pm-mobile ; cd ~/ng/pm-mobile"
-alias geny='/opt/genymobile/genymotion/genymotion >/dev/null 2>&1 &'
 alias d=docker
 alias j8='use_java /usr/lib/jvm/java-8-oracle'
 alias j11='use_java /usr/lib/jvm/jdk-11.0.1'
-alias mm='./mvnw -Pdev -Ptest -DskipTests'
+alias oj8='use_java /usr/lib/jvm/java-8-openjdk-amd64'
+alias oj11='use_java /usr/lib/jvm/java-11-openjdk-amd64'
+alias mm='./mvnw -Pdev -DskipTests'
 alias mdep='mm dependency:tree -Dverbose'
-alias gitsvnup='git co master && git svn fetch && git svn rebase && git co release && git svn fetch && git svn rebase && git co work && git rebase master'
-alias gm='g && git co master'
-alias gw='g && git co work'
-alias prod='ssh root@monitoring.prod.dc.local'
-alias ref='ssh root@hadoop.ref.dc.local'
 alias jp9='~/jprofiler9/bin/jprofiler >/dev/null 2>&1 </dev/null &'
 alias mvnrelease='./mvnw --batch-mode release:prepare release:perform'
 alias xmind='j8 >/dev/null 2>&1 && cd /home/tow/bin/XMind/XMind_amd64 && ./XMind >/dev/null 2>&1 </dev/null &'
 alias freeplane='j11 >/dev/null 2>&1 && /usr/bin/freeplane >/dev/null 2>&1 </dev/null &'
 alias ociimages='oci compute image list | jq '"'"'.data[] | ."display-name", .id'"'"
 alias firefox='/usr/bin/firefox --new-instance'
-alias bastion-dev='ssh -i ~/.ssh/id_rsa_bastion twildgru@129.146.155.40'
+alias bastion-fedramp-qa='ssh twildgruber@bastion-ssvc301-1502097150.ap-southeast-2.elb.amazonaws.com'
+alias bastion-dev='ssh -i ~/.ssh/id_rsa_bastion twildgru@100.105.152.76'
 alias bastion-prod='ssh -i ~/.ssh/id_rsa_bastion twildgru@129.213.76.211'
-alias bastion-dev-ff='ssh -i ~/.ssh/id_rsa_bastion -fN -D 5555 twildgru@129.146.155.40 ; firefox -P proxy-bastion-dev >/dev/null 2>&1 &'
+alias bastion-fedramp-qa-ff='ssh -fN -D 5555 twildgruber@bastion-ssvc301-1502097150.ap-southeast-2.elb.amazonaws.com ; firefox -P proxy-bastion-dev >/dev/null 2>&1 &'
+alias bastion-dev-ff='ssh -fN -D 5555 bastion-gbudevcorp ; firefox -P proxy-bastion-dev >/dev/null 2>&1 &'
 alias bastion-prod-ff='ssh -i ~/.ssh/id_rsa_bastion -fN -D 5554 twildgru@129.213.76.211 ; firefox -P proxy-bastion-prod >/dev/null 2>&1 &'
-alias cpm-ff='ssh -fN -D 5454 root@monitoring.prod.dc.local ; firefox -P proxy-cpm >/dev/null 2>&1 &'
+alias cpm-ff='ssh -fN -D 5454 root@monitoring.prod.dc.local ; firefox -P proxy-cpm >/dev/null 2>&1 </dev/null & disown'
 alias tap='terraform apply'
 alias p='cd ~/acx/package-management'
 alias install-mvnw='tar xf ~/.mvnw.tar'
@@ -100,27 +71,6 @@ shopt -s histappend
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-function svn_branch {
-  export svnbranch=[$(svn info 2>/dev/null | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk' | egrep -o '[^/]+$' | sed -e 's/\(.*\)/\1/')]
-    if [ "$?" -ne 0 ]
-      then svnbranch=
-    fi
-    if [[ "${svnbranch}" == "[]" ]]
-      then svnbranch=
-    fi
-}
- 
-# set usercolor based on whether we are running with Admin privs
-function user_color {
-    id | grep "Admin" > /dev/null
-    RETVAL=$?
-    if [[ $RETVAL == 0 ]]; then
-        usercolor="[0;35m";
-    else
-        usercolor="[0;32m";
-    fi
-}
-
 function grepjars {
     if [ -z "$1" ] ; then
 	echo "Usage: grepjars <Pattern>"
@@ -129,64 +79,12 @@ function grepjars {
     fi
 }
 
-function jcprod {
-    local SSHPID
-    ssh -N -D 7778 root@ng${1}.prod.dc.local &
-    SSHPID=$!
-    sleep 3
-    jconsole -J-DsocksProxyHost=localhost -J-DsocksProxyPort=7778 service:jmx:rmi:///jndi/rmi://localhost:8282/jmxrmi -J-DsocksNonProxyHosts=
-    kill $SSHPID
-}
-
-function svn-old-branches {
-    local twoweeksago=$(date -I -d '2 weeks ago')
-    svn-branch-creation-dates | (
-	while read i ; do
-	    local x=($i)
-	    if [ "${x[0]}" \< "$twoweeksago" ] ; then
-		echo $i
-	    fi
-	done
-    )
-}
-
-function svn-branch-creation-dates {
-    (for i in $(svn ls svn://svn.muc.local/ng.platform/branches) ; do
-	 echo "$(svn-branch-creation-date ${i}) ${i}"
-     done)|sort -k1
-}
-
-function svn-branch-creation-date {
-    echo "$(svn log --stop-on-copy --xml svn://svn.muc.local/ng.platform/branches/${1}|xmllint --xpath '//logentry[last()]/date/text()' -|cut -dT -f1)"
-}
-
-function sshp {
-    local host
-    host=${1}
-    shift
-    ssh root@${host}.prod.dc.local "$*"
-}
-
-function sshr {
-    local host
-    host=${1}
-    shift
-    ssh root@${host}.ref.dc.local "$*"
-}
-
-function sshdc {
-    local host
-    host=${1}
-    shift
-    ssh root@${host}.dc.local "$*"
-}
-
 # Set prompt and window title
-inputcolor='[0;37m'
+inputcolor='[0;30m'
 cwdcolor='[0;34m'
 gitcolor='[1;31m'
-user_color
- 
+usercolor='[0;32m'
+
 # Setup for window title
 export TTYNAME=$$
 function settitle() {
@@ -198,23 +96,16 @@ function settitle() {
   t="$TTYNAME $p"
   echo -ne "\e]2;$t\a\e]1;$t\a";
 }
- 
+
 export EDITOR=emacsclient
-export PROMPT_COMMAND='settitle; svn_branch; history -a;'
-export PS1='\[\e${usercolor}\][\u]\[\e${gitcolor}\]$(__git_ps1 "[%s]")\[\e${gitcolor}\]${svnbranch}\[\e${cwdcolor}\][$PWD]\[\e${inputcolor}\] ➤ '
+export PROMPT_COMMAND='settitle; history -a;'
+export PS1='\e[0;93m[\D{%Y-%m-%d %H:%M:%S}]\e${usercolor}[\u@\h]\e${gitcolor}$(__git_ps1 "[%s]")\e${cwdcolor}[$PWD]\e${inputcolor} ➤ '
 export PS2=' | '
 
 eval `dircolors ~/.dir_colors`
 
-[[ -s "/home/tow/.sdkman/bin/sdkman-init.sh" ]] && source "/home/tow/.sdkman/bin/sdkman-init.sh"
-
-export NVM_DIR="/home/tow/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-
-export TERM=xterm
-
 preexec () {
-    echo -n "[1;34m[0m" && :;
+    echo -n "[0m" && :;
 }
 preexec_invoke_exec () {
     [ -n "$COMP_LINE" ] && return  # do nothing if completing
@@ -224,31 +115,27 @@ preexec_invoke_exec () {
 }
 trap 'preexec_invoke_exec' DEBUG
 
-export PATH="$HOME/bin:$PATH"
-
-export TMUXIFIER_TMUX_OPTS="-f /dev/null"
-export PATH="$PATH:$HOME/.tmuxifier/bin"
-
 export SQLPATH=/home/tow/.sqlplus
-export ACONEX_PRIVATE_DOCKER_REGISTRY=dockerhub.muc.local
-export ACONEX_DOCKER_HUB_MIRROR=dockerhub.muc.local
 
-export PATH=/home/tow/bin:$PATH
+####################################################################################################################################
+# Autocomplete
+####################################################################################################################################
 
-[[ -e "/home/tow/lib/oracle-cli/lib/python3.6/site-packages/oci_cli/bin/oci_autocomplete.sh" ]] && source "/home/tow/lib/oracle-cli/lib/python3.6/site-packages/oci_cli/bin/oci_autocomplete.sh"
+. /etc/bash_completion
 
-#export TF_VAR_tenancy_id=ocid1.tenancy.oc1..aaaaaaaa6gtmn46bketftho3sqcgrlvdfsenqemqy3urkbthlpkos54a6wsa
-#export TF_VAR_compartment_id=ocid1.compartment.oc1..aaaaaaaastzjsmkgsupv2w3qk6gximaoy54jhvvvc65sz7ohdz4cxc7og4ma
-export TF_VAR_user_id=ocid1.user.oc1..aaaaaaaay6en4prosyn5oe5gwvpdwzupm3nebonyjjbuwmm6fenlgnhf2xoq
-export TF_VAR_fingerprint=b7:f6:2b:8d:37:23:bf:06:02:de:e1:fa:cb:ed:b2:fd
-export TF_VAR_private_key=~/.oci/oci_api_key.pem
-export TF_VAR_bastion_user=twildgru
+# docker
+. /usr/share/bash-completion/completions/docker 
+# d alias for docker
+complete -F _docker d
 
-function ocissh () {
-    ssh -R6666:localhost:54321 -i ~/.ssh/id_rsa -o ProxyCommand='ssh -W %h:%p -i ~/.ssh/id_rsa_bastion twildgru@129.146.155.40' opc@$1
-}
+# oci
+source "$HOME/lib/oracle-cli/lib/python3.6/site-packages/oci_cli/bin/oci_autocomplete.sh"
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
+# bazel
+source "$HOME/.bazel/bin/bazel-complete.bash"
 
-export PATH="/home/tow/Fortify/Fortify_SCA_and_Apps_18.20/bin:$PATH"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export ANDROID_SDK_ROOT="$HOME/Android"
