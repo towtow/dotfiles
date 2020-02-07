@@ -99,8 +99,8 @@ function settitle() {
 
 export EDITOR=emacsclient
 export PROMPT_COMMAND='settitle; history -a;'
-export PS1='\e[0;93m[\D{%Y-%m-%d %H:%M:%S}]\e${usercolor}[\u@\h]\e${gitcolor}$(__git_ps1 "[%s]")\e${cwdcolor}[$PWD]\e${inputcolor} ➤ '
-export PS2=' | '
+export PS1='\n\e[0;93m[\D{%Y-%m-%d %H:%M}]\e${usercolor}[\u@\h]\e${gitcolor}$(__git_ps1 "[%s]")\e${cwdcolor}[$PWD]\e${inputcolor}\n➤ '
+export PS2='| '
 
 eval `dircolors ~/.dir_colors`
 
